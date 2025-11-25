@@ -42,11 +42,20 @@
 <body class="p-4 md:p-8">
 <div class="max-w-2xl mx-auto">
 <header class="text-center mb-6">
-<h1 class="text-2xl md:text-3xl font-extrabold text-green-700">Biochar Project Feasibility Calculator</h1>
-<h2 class="text-lg font-medium text-gray-700 mt-1">in Latin American Coffee & Cacao Supply Chains</h2>
-<p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mt-4">Climatebase Fellowship Cohort 8 Capstone Project</p>
-<p class="text-xs font-medium text-gray-500 mt-2">(All values in USD)</p>
-<p class="text-lg font-medium text-green-800 mt-6">Tool 4: Revenue Streams</p>
+    <h1 class="text-2xl md:text-3xl font-extrabold text-green-700">Biochar Project Feasibility Calculator</h1>
+    <h2 class="text-lg font-medium text-gray-700 mt-1">for Latin American Coffee & Cacao Supply Chains</h2>
+    <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mt-4">Climatebase Fellowship Cohort 8 Capstone Project</p>
+    <p class="text-xs font-medium text-gray-500 mt-2">(All values in USD)</p>
+    
+    <div class="mt-4 mb-6">
+        <a href="https://chatgpt.com/g/g-691ea2b1c2888191b85e54e203c53b2f-biochar-feasibility-guide" 
+           target="_blank" 
+           class="inline-block bg-blue-50 text-blue-700 hover:text-blue-900 border border-blue-200 rounded-full px-4 py-1 text-sm font-medium transition">
+            Questions? Click here to ask the Biochar Feasibility Guide AI assistant ↗
+        </a>
+    </div>
+
+    <p class="text-lg font-medium text-green-800">Tool 4: Revenue Streams</p>
 </header>
 
 <div class="w-full mb-8">
@@ -59,7 +68,6 @@
 </div>
 </div>
 
-<!-- Carbon Credit Section -->
 <div class="input-section section-green-tint">
 <h2 class="section-title section-title-green">Carbon Credit Revenue</h2>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -71,7 +79,6 @@
 <p id="loadingIndicatorCredits" class="text-xs text-yellow-700">Loading from Tool 2...</p>
 </div>
 
-<!-- Biochar Sales Section -->
 <div class="input-section">
 <h2 class="section-title section-title-blue">Biochar Sales Revenue</h2>
 
@@ -98,7 +105,6 @@
 </label>
 
 <div id="retailFields" class="p-4 bg-white rounded-lg border border-gray-200 space-y-4" style="display: none;">
-<!-- Retail inputs -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 <label class="block"><span class="label-text">Biochar % in Mix</span>
 <input type="number" id="inputBiocharPercentInMix" value="30" min="0" max="100" class="input-field"></label>
@@ -150,7 +156,6 @@
 <input type="number" id="inputMarketingBudget" value="5000" min="0" class="input-field"></label>
 </div>
 
-<!-- Other Revenue: Wood Vinegar -->
 <div class="input-section">
 <h2 class="section-title section-title-gray">Other Revenue Streams (Optional)</h2>
 <div class="p-4 bg-white rounded-lg border border-gray-200 space-y-3">
