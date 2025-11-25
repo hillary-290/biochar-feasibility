@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Dashboard (Tool 6)</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="engine.js"></script> <style>
+    <script src="engine.js"></script> 
+    <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f4f4f5; }
         .dashboard-card { @apply bg-white p-6 rounded-2xl shadow-sm border border-gray-200; }
@@ -14,19 +15,18 @@
         .hero-value { @apply text-4xl font-extrabold text-gray-900; }
         .hero-sub { @apply text-xs font-medium mt-2; }
         
-        /* Risk Cards - *** CSS FIX: Removed @apply *** */
+        /* Risk Cards */
         .kpi-card { padding: 1rem; border-radius: 0.5rem; border-width: 2px; margin-bottom: 0.75rem; }
         .kpi-green { background-color: #f0fdf4; border-color: #bbf7d0; }
         .kpi-yellow { background-color: #fefce8; border-color: #fde047; }
         .kpi-red { background-color: #fef2f2; border-color: #fca5a5; }
         
-        .kpi-title { @apply font-bold text-base mb-1; }
-        .kpi-desc { @apply text-sm text-gray-700 leading-tight; }
+        .kpi-title { font-weight: 700; font-size: 1rem; margin-bottom: 0.25rem; }
+        .kpi-desc { font-size: 0.875rem; color: #374151; line-height: 1.25; }
 
-        .kpi-green .kpi-title { @apply text-green-800; }
-        .kpi-yellow .kpi-title { @apply text-yellow-800; }
-        .kpi-red .kpi-title { @apply text-red-800; }
-        /* --- End CSS Fix --- */
+        .kpi-green .kpi-title { color: #166534; }
+        .kpi-yellow .kpi-title { color: #854d0e; }
+        .kpi-red .kpi-title { color: #991b1b; }
 
         /* NEW Cosmetic Style */
         .section-title { @apply text-xl font-bold pb-2 border-b mb-4; }
@@ -139,10 +139,19 @@
     <div class="max-w-5xl mx-auto">
         <header class="text-center mb-6">
             <h1 class="text-2xl md:text-3xl font-extrabold text-green-700">Biochar Project Feasibility Calculator</h1>
-            <h2 class="text-lg font-medium text-gray-700 mt-1">in Latin American Coffee & Cacao Supply Chains</h2>
+            <h2 class="text-lg font-medium text-gray-700 mt-1">for Latin American Coffee & Cacao Supply Chains</h2>
             <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mt-4">Climatebase Fellowship Cohort 8 Capstone Project</p>
             <p class="text-xs font-medium text-gray-500 mt-2">(All values in USD)</p>
-            <p class="text-lg font-medium text-green-800 mt-6">Tool 6: Executive Dashboard</p>
+            
+            <div class="mt-4 mb-6">
+                <a href="https://chatgpt.com/g/g-691ea2b1c2888191b85e54e203c53b2f-biochar-feasibility-guide" 
+                   target="_blank" 
+                   class="inline-block bg-blue-50 text-blue-700 hover:text-blue-900 border border-blue-200 rounded-full px-4 py-1 text-sm font-medium transition">
+                    Questions? Click here to ask the Biochar Feasibility Guide AI assistant ↗
+                </a>
+            </div>
+
+            <p class="text-lg font-medium text-green-800">Tool 6: Executive Dashboard</p>
         </header>
 
         <div class="w-full mb-8">
@@ -454,6 +463,7 @@
                 let opex_Labor = (o_data.generalStaffCount * o_data.generalSalary) + (o_data.mgmtStaffCount * o_data.mgmtSalary);
                 let opex_Utilities = (o_data.utilities || 0);
                 
+                // *** BUG FIX: Only reduce months if Strategy is 'Shutdown', ignore 'Store' ***
                 if (t1.seasonalityStrategy === 'shutdown') {
                     const months = (o_data.monthsOperational || 12);
                     opex_Labor = opex_Labor * (months / 12);
@@ -472,7 +482,7 @@
                                      (o_data.totalMobileRelocationOpex || 0);
                 
                 const opex_Finance = (o_data.hasFeedstockLoan ? (o_data.feedstockWorkingCapital * (o_data.feedstockLoanInterestRate / 100)) : 0) +
-                                   (fin_data.loanAmount * (fin_data.interestRate / 100));
+                                     (fin_data.loanAmount * (fin_data.interestRate / 100));
 
                 const totalOpex = opex_Feedstock + 
                                   opex_Logistics + 
