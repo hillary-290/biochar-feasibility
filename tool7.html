@@ -113,6 +113,7 @@
         .nav-button-white:hover { background-color: #f9fafb; }
         
         .hidden { display: none; }
+        .print-only { display: none; } 
 
         /* --- PRINT STYLES --- */
         @media print {
@@ -468,11 +469,14 @@
                 // --- OPEX ---
                 let opex_Labor = (o_data.generalStaffCount * o_data.generalSalary) + (o_data.mgmtStaffCount * o_data.mgmtSalary);
                 let opex_Utilities = (o_data.utilities || 0);
+                
+                // *** FIXED LOGIC: Only reduce months if Strategy is 'Shutdown', ignore 'Store' ***
                 if (t1.seasonalityStrategy === 'shutdown') {
                     const months = (o_data.monthsOperational || 12);
                     opex_Labor = opex_Labor * (months / 12);
                     opex_Utilities = opex_Utilities * (months / 12);
                 }
+                
                 // *** UPDATED: Includes new opex lines ***
                 const baseOpexSite = opex_Labor + 
                                      (o_data.insurance || 0) + 
