@@ -146,10 +146,19 @@ body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; color: #1118
 
 <header class="text-center mb-6">
     <h1 class="text-2xl md:text-3xl font-extrabold text-green-700">Biochar Project Feasibility Calculator</h1>
-    <h2 class="text-lg font-medium text-gray-700 mt-1">in Latin American Coffee & Cacao Supply Chains</h2>
+    <h2 class="text-lg font-medium text-gray-700 mt-1">for Latin American Coffee & Cacao Supply Chains</h2>
     <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mt-4">Climatebase Fellowship Cohort 8 Capstone Project</p>
     <p class="text-xs font-medium text-gray-500 mt-2">(All values in USD)</p> 
-    <p class="text-lg font-medium text-green-800 mt-6">Tool 2: Production Calculator</p>
+
+    <div class="mt-4 mb-6">
+        <a href="https://chatgpt.com/g/g-691ea2b1c2888191b85e54e203c53b2f-biochar-feasibility-guide" 
+           target="_blank" 
+           class="inline-block bg-blue-50 text-blue-700 hover:text-blue-900 border border-blue-200 rounded-full px-4 py-1 text-sm font-medium transition">
+            Questions? Click here to ask the Biochar Feasibility Guide AI assistant ↗
+        </a>
+    </div>
+
+    <p class="text-lg font-medium text-green-800">Tool 2: Production Calculator</p>
 </header>
 
 <div class="w-full mb-8">
@@ -210,8 +219,11 @@ body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; color: #1118
             <li class="calc-step">
                 <div class="step-input-area"><div class="step-number-container"><span class="step-label-left"><span class="step-number">2</span><span class="label-text">Ash Content (%)</span></span><span class="step-label-right">
                     <div class="tooltip-container"><span class="f-icon">f</span><span class="tooltip-text">Calculates: [Step 1 Volume] * (1 - Ash %)</span></div>
-                    <div class="tooltip-container"><span class="tooltip-icon">?</span><span class="tooltip-text">The non-organic, mineral content. 5% is a common default for coffee husks.</span></div>
-                </span></div><input type="number" id="divF1_Ash" value="5" class="input-field" min="0" step="0.1"></div>
+                    <div class="tooltip-container"><span class="tooltip-icon">?</span>
+                        <span class="tooltip-text">The non-organic, mineral content of feedstock. Ash content varies depending on feedstock type, contamination, and whether the biomass has been pretreated. A default value of 10% is used to represent mixed, non-pretreated coffee pulp and husk commonly available at origin. Users may adjust this value based on known feedstock composition and handling practices.</span>
+                    </div>
+                </span></div>
+                <input type="number" id="divF1_Ash" value="10" class="input-field" min="0" step="0.1"></div>
                 <div class="step-connector">&rarr;</div>
                 <div class="step-output-area"><span class="step-output-label">Dry Ash-Free Matter</span><div id="divF1_DryAshFree" class="step-output-value">0 tonnes</div></div>
             </li>
@@ -442,20 +454,20 @@ const inputsToTrack = [
 // KILN DATABASE (CLEANED & DEDUPLICATED)
 // =================================================================
 const KILN_DB = [
-    { size: 'micro', model: 'centralized', name: 'Henan Xuye (High capacity)', price: 68000 },
+    { size: 'micro', model: 'centralized', name: 'Henan Xuye', price: 68000 },
     { size: 'micro', model: 'centralized', name: 'Haiqi / EUBC series (eUBC small-to-mid)', price: 120000 },
     { size: 'micro', model: 'mobile', name: 'Haiqi / EUBC series (EUBC small-to-mid)', price: 80000 },
     { size: 'small', model: 'decentralized', name: 'Haiqi / EUBC series (eUBC small-to-mid)', price: 120000 },
-    { size: 'small', model: 'decentralized', name: 'Henan Xuye (High capacity)', price: 68000 },
-    { size: 'small', model: 'centralized', name: 'Henan Xuye (High capacity)', price: 68000 },
+    { size: 'small', model: 'decentralized', name: 'Henan Xuye', price: 68000 },
+    { size: 'small', model: 'centralized', name: 'Henan Xuye', price: 68000 },
     { size: 'small', model: 'centralized', name: 'Pyreg (PX 1500- H)', price: 1794000 },
     { size: 'small', model: 'centralized', name: 'Haiqi / EUBC series (EUBC small-to-mid)', price: 120000 },
     { size: 'small', model: 'mobile', name: 'Haiqi / EUBC series (EUBC small-to-mid)', price: 80000 },
-    { size: 'medium', model: 'decentralized', name: 'Henan Xuye (High capacity)', price: 68000 },
+    { size: 'medium', model: 'decentralized', name: 'Henan Xuye', price: 68000 },
     { size: 'medium', model: 'decentralized', name: 'Mingjie (MJT-1000)', price: 400000 },
     { size: 'medium', model: 'centralized', name: 'Beston (Model BST-50)', price: 480000 },
     { size: 'large', model: 'centralized', name: 'Beston (Model BST-50)', price: 480000 },
-    { size: 'large', model: 'centralized', name: 'Henan Xuye (High capacity)', price: 68000 }
+    { size: 'large', model: 'centralized', name: 'Henan Xuye', price: 68000 }
 ];
 
 
@@ -545,7 +557,7 @@ function loadProject() {
         document.getElementById('divF1_Price').value = d.f1_price || 0;
         document.getElementById('divF1_Competition').value = d.f1_competition || 'own';
         document.getElementById('divF1_Contract').value = d.f1_contract || 'own';
-        document.getElementById('divF1_Ash').value = (d.f1_ash * 100) || 5;
+        document.getElementById('divF1_Ash').value = (d.f1_ash * 100) || 10;
         document.getElementById('divF1_Yield').value = (d.f1_yield * 100) || 25;
         document.getElementById('divF1_Carbon').value = (d.f1_carbon * 100) || 70;
         document.getElementById('divF1_Conv').value = d.f1_conv || 1.75;
