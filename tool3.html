@@ -79,10 +79,19 @@
     <div class="max-w-3xl mx-auto">
         <header class="text-center mb-6">
             <h1 class="text-2xl md:text-3xl font-extrabold text-green-700">Biochar Project Feasibility Calculator</h1>
-            <h2 class="text-lg font-medium text-gray-700 mt-1">in Latin American Coffee & Cacao Supply Chains</h2>
+            <h2 class="text-lg font-medium text-gray-700 mt-1">for Latin American Coffee & Cacao Supply Chains</h2>
             <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mt-4">Climatebase Fellowship Cohort 8 Capstone Project</p>
             <p class="text-xs font-medium text-gray-500 mt-2">(All values in USD)</p>
-            <p class="text-lg font-medium text-green-800 mt-6">Tool 3: Logistics (Inbound)</p>
+            
+            <div class="mt-4 mb-6">
+                <a href="https://chatgpt.com/g/g-691ea2b1c2888191b85e54e203c53b2f-biochar-feasibility-guide" 
+                   target="_blank" 
+                   class="inline-block bg-blue-50 text-blue-700 hover:text-blue-900 border border-blue-200 rounded-full px-4 py-1 text-sm font-medium transition">
+                    Questions? Click here to ask the Biochar Feasibility Guide AI assistant ↗
+                </a>
+            </div>
+
+            <p class="text-lg font-medium text-green-800">Tool 3: Logistics (Inbound)</p>
         </header>
 
         <div class="w-full mb-8">
@@ -239,7 +248,11 @@
                     </label>
                     
                     <div class="time-inputs hidden space-y-5 mt-4">
-                        <label class="block"><span class="label-text font-semibold">All-In Hourly Cost ($/hr)</span><input type="number" class="input-field route-rate border-2 border-gray-300" value="55" min="0"></label>
+                        <label class="block">
+                            <span class="label-text font-semibold">All-In Hourly Cost ($/hr)</span>
+                            <div class="tooltip-container ml-1"><span class="tooltip-icon">?</span><span class="tooltip-text">Include operating expenses such as fuel, maintenance, repairs, insurance, and registration. Do not include driver wages (those should be entered in Tool 5 with salaries) or the cost of buying the vehicle (also in Tool 5). If unsure, ask the AI assistant: "Help me estimate my truck’s hourly operating cost."</span></div>
+                            <input type="number" class="input-field route-rate border-2 border-gray-300" value="55" min="0">
+                        </label>
                         <div class="grid grid-cols-2 gap-4">
                             <div class="bg-orange-100 rounded-lg border-2 border-orange-300 p-3"><label class="block"><span class="label-text text-orange-900 font-bold mb-2 block leading-tight">Dry Season Round-Trip (Hrs)</span><input type="number" class="input-field route-hours-dry border-orange-300" value="4" min="0.5" step="0.5"></label></div>
                             <div class="bg-blue-100 rounded-lg border-2 border-blue-300 p-3"><label class="block"><span class="label-text text-blue-900 font-bold mb-2 block leading-tight">Rainy Season Round-Trip (Hrs)</span><input type="number" class="input-field route-hours-rain border-blue-300" value="6" min="0.5" step="0.5"></label></div>
@@ -247,6 +260,9 @@
                     </div>
 
                     <div class="flat-inputs hidden space-y-5 mt-4">
+                        <p class="text-xs text-gray-500 mb-2">
+                            <span class="font-bold">Note:</span> Use the full price negotiated with the driver for a round trip.
+                        </p>
                         <div class="grid grid-cols-2 gap-4">
                             <div class="bg-orange-100 rounded-lg border-2 border-orange-300 p-3"><label class="block"><span class="label-text text-orange-900 font-bold mb-2 block">Dry Season Quote ($)</span><input type="number" class="input-field route-quote-dry border-orange-300" value="150" min="0"></label></div>
                             <div class="bg-blue-100 rounded-lg border-2 border-blue-300 p-3"><label class="block"><span class="label-text text-blue-900 font-bold mb-2 block">Rainy Season Quote ($)</span><input type="number" class="input-field route-quote-rain border-blue-300" value="175" min="0"></label></div>
