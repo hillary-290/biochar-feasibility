@@ -20,6 +20,7 @@
         .kpi-green { background-color: #f0fdf4; border-color: #bbf7d0; }
         .kpi-yellow { background-color: #fefce8; border-color: #fde047; }
         .kpi-red { background-color: #fef2f2; border-color: #fca5a5; }
+        .kpi-blue { background-color: #eff6ff; border-color: #bfdbfe; } /* New for Neutral/Info */
         
         .kpi-title { font-weight: 700; font-size: 1rem; margin-bottom: 0.25rem; }
         .kpi-desc { font-size: 0.875rem; color: #374151; line-height: 1.25; }
@@ -27,6 +28,7 @@
         .kpi-green .kpi-title { color: #166534; }
         .kpi-yellow .kpi-title { color: #854d0e; }
         .kpi-red .kpi-title { color: #991b1b; }
+        .kpi-blue .kpi-title { color: #1e40af; }
 
         /* NEW Cosmetic Style */
         .section-title { @apply text-xl font-bold pb-2 border-b mb-4; }
@@ -115,6 +117,7 @@
             .kpi-green { background-color: #f0fdf4 !important; border-color: #bbf7d0 !important; }
             .kpi-yellow { background-color: #fefce8 !important; border-color: #fde047 !important; }
             .kpi-red { background-color: #fef2f2 !important; border-color: #fca5a5 !important; }
+            .kpi-blue { background-color: #eff6ff !important; border-color: #bfdbfe !important; }
             
             .hero-value { font-size: 20px !important; } /* Smaller hero numbers */
             .hero-label { font-size: 11px !important; }
@@ -231,7 +234,7 @@
                 </div>
 
                 <div id="feedstockFeasibilityCard" class="dashboard-card">
-                    <h3 class="section-title section-title-gray">Feedstock Economics</h3>
+                    <h3 class="section-title section-title-gray">Input Cost Position</h3>
                     <div class="flex flex-col md:flex-row justify-between items-center">
                         <div>
                             <p class="text-sm text-gray-600 mb-1">Total Delivered Cost (Purchase + Logistics)</p>
@@ -359,6 +362,24 @@
             return npv;
         }
 
+        // --- Matrix Data (Embedded in Tool 6 for KPI lookup) ---
+        const COUNTRY_DATA = {
+            "bolivia": { permit: { time: "4–8 months" } },
+            "brazil": { permit: { time: "6-9 months" } },
+            "colombia": { permit: { time: "6 months" } },
+            "costa_rica": { permit: { time: "6–12 months" } },
+            "dominican_republic": { permit: { time: "3–6 months" } },
+            "ecuador": { permit: { time: "6–12 months" } },
+            "el_salvador": { permit: { time: "3–6 months" } },
+            "guatemala": { permit: { time: "6–12 months" } },
+            "honduras": { permit: { time: "6–12 months" } },
+            "mexico": { permit: { time: "3–6 months" } },
+            "nicaragua": { permit: { time: "4–8 months" } },
+            "panama": { permit: { time: "6–12 months" } },
+            "peru": { permit: { time: "4–8 months" } },
+            "custom": { permit: { time: "Unknown" } }
+        };
+
         // --- Data Loading & Calculation ---
         document.addEventListener('DOMContentLoaded', () => {
             if (window.BiocharEngine) {
@@ -368,7 +389,7 @@
                 if (storedData) projectData = JSON.parse(storedData);
             }
             
-            // *** NEW: Smarter loading logic ***
+            // Check for required tools
             const missingTools = [];
             if (!projectData.tool1) missingTools.push("Tool 1");
             if (!projectData.tool2) missingTools.push("Tool 2");
@@ -403,7 +424,7 @@
                 const o_data = t5.opex || {};
                 const fin_data = t5.finance || {};
 
-                // === 2. CALCULATE TOTALS ===
+                // === 2. CALCULATE TOTALS (LOGIC SYNCED WITH TOOL 7) ===
 
                 // --- FEEDSTOCK & BIOCHAR (from T2) ---
                 const biochar1 = (f_data.f1_tonnes || 0) * (1 - (f_data.f1_ash || 0)) * (f_data.f1_yield || 0);
@@ -426,7 +447,7 @@
                 let opex_RetailCosts = 0; // Compost, packaging, etc.
                 const mixPercent = (t4.retailMixPercent || 0) / 100; // Define mixPercent
                 
-                // *** NEW: Per-Bag Logic ***
+                // *** FIX: Per-Bag Logic ***
                 if (t4.salesModel === 'retail' && mixPercent > 0 && (t4.retailBagWeightKg || 0) > 0) {
                     const biocharPerBagKg = t4.retailBagWeightKg * mixPercent;
                     const totalBags = (totalBiochar * 1000) / biocharPerBagKg; // Convert tonnes to kg
@@ -454,7 +475,7 @@
                 const totalRevenue = rev_Credits + rev_Biochar + rev_Vinegar;
 
                 // --- OPEX (from T2, T3, T4, T5) ---
-                // *** BUG FIX: Default prices to 0 ***
+                // *** FIX: Default prices to 0 ***
                 const opex_Feedstock = ((f_data.f1_tonnes || 0) * (f_data.f1_price || 0)) + ((f_data.f2_tonnes || 0) * (f_data.f2_price || 0));
                 const opex_Logistics = t3.totalAnnualLogisticsCost || 0;
                 const opex_Marketing = t4.marketingBudget || 0;
@@ -463,7 +484,7 @@
                 let opex_Labor = (o_data.generalStaffCount * o_data.generalSalary) + (o_data.mgmtStaffCount * o_data.mgmtSalary);
                 let opex_Utilities = (o_data.utilities || 0);
                 
-                // *** BUG FIX: Only reduce months if Strategy is 'Shutdown', ignore 'Store' ***
+                // *** FIX: Only reduce months if Strategy is 'Shutdown', ignore 'Store' ***
                 if (t1.seasonalityStrategy === 'shutdown') {
                     const months = (o_data.monthsOperational || 12);
                     opex_Labor = opex_Labor * (months / 12);
@@ -509,7 +530,7 @@
                 setText('heroCapex', formatMoney(totalCapex));
                 colorHero('heroProfit', netProfit >= 0, netProfit < 0);
                 setText('heroProfit', formatMoney(netProfit));
-                // *** BUG FIX: Check for Infinity ***
+                // *** FIX: Check for Infinity ***
                 setText('heroPayback', !isFinite(paybackYears) ? "Never" : `${paybackYears.toFixed(1)} Years`);
                 colorHero('heroPayback', paybackYears <= 5, paybackYears > 10);
                 colorHero('heroNpv', npv >= 0, npv < 0);
@@ -520,7 +541,7 @@
 
                 // Feasibility
                 const deliveredCostPerTonne = totalFeedstock > 0 ? ((opex_Feedstock + opex_Logistics) / totalFeedstock) : 0;
-                renderFeasibility(deliveredCostPerTonne); // *** BUG FIX is here ***
+                renderFeasibility(deliveredCostPerTonne); // *** FIX: New logic here ***
 
                 // Financial Summary Table
                 setText('summRevenue', formatMoney(totalRevenue));
@@ -555,14 +576,15 @@
         }
 
         function renderFeasibility(perTonne) {
-            // *** BUG FIX: Handle NaN/0 ***
+            // *** FIX: Handle NaN/0 ***
             if (isNaN(perTonne)) perTonne = 0; 
             
             document.getElementById('valDeliveredCost').textContent = formatMoney(perTonne);
             const badge = document.getElementById('feasibilityBadge');
             const msg = document.getElementById('feasibilityMsg');
             
-            if (perTonne <= 0) { // *** MODIFIED: Handle $0 case ***
+            // *** UPDATED TEXT: Favorable / Less Favorable ***
+            if (perTonne <= 0) {
                 badge.className = "mt-4 md:mt-0 px-4 py-2 rounded-full font-bold text-sm uppercase bg-green-100 text-green-800";
                 badge.textContent = "Highly Favorable";
                 msg.textContent = "Your feedstock is free ($0/t). This gives you a strong competitive advantage.";
@@ -572,16 +594,16 @@
                 msg.textContent = "Your delivered cost is excellent (<$20/t). This gives you a strong competitive advantage.";
             } else if (perTonne <= 40) {
                 badge.className = "mt-4 md:mt-0 px-4 py-2 rounded-full font-bold text-sm uppercase bg-blue-100 text-blue-800";
-                badge.textContent = "Feasible";
+                badge.textContent = "Favorable";
                 msg.textContent = "Your delivered cost is standard ($20-$40/t). Profitability will depend on your sales model.";
             } else if (perTonne <= 60) {
                 badge.className = "mt-4 md:mt-0 px-4 py-2 rounded-full font-bold text-sm uppercase bg-yellow-100 text-yellow-800";
-                badge.textContent = "Risky / Marginal";
-                msg.textContent = "Your delivered cost is high ($40-$60/t). You are highly sensitive to biochar price drops.";
+                badge.textContent = "Marginal";
+                msg.textContent = "Your delivered cost is high ($40-$60/t). You are sensitive to biochar price drops.";
             } else {
                 badge.className = "mt-4 md:mt-0 px-4 py-2 rounded-full font-bold text-sm uppercase bg-red-100 text-red-800";
-                badge.textContent = "Likely Unviable";
-                msg.textContent = "Your delivered cost is >$60/t. Transport and feedstock costs may erase your profit.";
+                badge.textContent = "Less Favorable";
+                msg.textContent = "Your delivered cost is >$60/t. Transport and feedstock costs may pinch your profit.";
             }
         }
 
@@ -590,7 +612,13 @@
             const kpiContainer = document.getElementById('kpiContainer'); 
             kpiContainer.innerHTML = ''; // Clear loader
             
-            // 1. Community Buy-In (from T1)
+            // 1. Permit Timeline (NEW)
+            const country = t1.country || "custom";
+            const countryInfo = COUNTRY_DATA[country] || COUNTRY_DATA["custom"];
+            const leadTime = countryInfo.permit?.time || "Unknown";
+            addKPI('blue', `Permit Timeline: ${leadTime}`, `Based on typical air quality permitting timelines for ${country.toUpperCase().replace('_',' ')}. Plan your launch accordingly.`);
+
+            // 2. Community Buy-In (from T1)
             const buyIn = t1.communityBuyIn || 'not_secured';
             if (buyIn === 'secured') {
                 addKPI('green', 'Community Buy-In: Secured', 'Excellent. A strong foundation for a successful project.');
@@ -600,7 +628,7 @@
                 addKPI('red', 'Community Buy-In: Not Secured', 'High risk. Projects without community support often fail. Prioritize engagement immediately.');
             }
 
-            // 2. Feedstock Risk (from T2)
+            // 3. Feedstock Risk (from T2)
             const f1_comp = t2.diversified?.f1_competition;
             const f1_cont = t2.diversified?.f1_contract;
             let isHighRisk = (f1_cont === 'spot');
@@ -621,7 +649,7 @@
                 addKPI('green', 'Feedstock Risk: Low', 'Feedstock is secured via ownership or a low-competition written contract.');
             }
             
-            // 3. Marketing Plan (from T4)
+            // 4. Marketing Plan (from T4)
             const marketing = t4.marketingPlan;
             if (marketing === 'coop') {
                 addKPI('green', 'Sales Plan: Secured', 'A built-in distribution (like a co-op) is the lowest-risk sales model.');
@@ -631,7 +659,7 @@
                 addKPI('red', 'Sales Plan: High Risk', 'No marketing plan in process. This is a critical gap that threatens all revenue projections.');
             }
 
-            // 4. Pyrolyzer Cost Basis (from T2)
+            // 5. Pyrolyzer Cost Basis (from T2)
             const kilnBasis = t2.kiln?.pyrolyzer_cost_basis;
             if (kilnBasis === 'manufacturer_quote') {
                 addKPI('green', 'Pyrolyzer Cost: Confirmed', 'Costs are based on a manufacturer quote, making your CAPEX estimate reliable.');
@@ -639,7 +667,7 @@
                 addKPI('yellow', 'Pyrolyzer Cost: Estimate', 'Your CAPEX is based on an estimate. Get an official quote to confirm project costs.');
             }
 
-            // 5. MRV Cost Basis (from T5)
+            // 6. MRV Cost Basis (from T5)
             const mrvBasis = t5.certSource;
             if (mrvBasis === 'quote') {
                 addKPI('green', 'MRV Cost: Confirmed', 'Costs are based on a provider quote, making your OPEX estimate reliable.');
@@ -647,7 +675,7 @@
                 addKPI('yellow', 'MRV Cost: Estimate', 'Your MRV costs are estimates. Get an official quote to confirm this cost.');
             }
             
-            // 6. Lab Results (from T2)
+            // 7. Lab Results (from T2)
             const labBasis = t2.kiln?.carbonDataBasis;
             if (labBasis === 'lab_results') {
                 addKPI('green', 'Carbon Data: Confirmed', 'Projections are based on reliable lab results.');
@@ -655,12 +683,12 @@
                 addKPI('red', 'Carbon Data: High Risk', 'Projections are based on generic defaults. Get lab results for your specific feedstock and kiln to confirm profitability.');
             }
             
-            // 7. Deforestation Risk (from T2)
+            // 8. Deforestation Risk (from T2)
             if (t2.diversified?.f2_isWood) {
                 addKPI('red', 'Deforestation Risk', 'Using woody biomass requires a strict audit trail to prove it is waste, not deforestation. Mitigation: Contracts must include Traceability Clauses.');
             }
 
-            // 8. Seasonal Strategy (from T1)
+            // 9. Seasonal Strategy (from T1)
             if (t1.seasonalityStrategy === 'shutdown') {
                 addKPI('red', 'Strategy Risk: High', 'Seasonal shutdowns are often economically unviable due to low equipment utilization.');
             } else if (t1.seasonalityStrategy === 'store') {
@@ -670,7 +698,7 @@
 
         function addKPI(color, title, msg) {
             const kpiContainer = document.getElementById('kpiContainer');
-            const colors = { green: 'kpi-green', yellow: 'kpi-yellow', red: 'kpi-red' };
+            const colors = { green: 'kpi-green', yellow: 'kpi-yellow', red: 'kpi-red', blue: 'kpi-blue' };
             const div = document.createElement('div');
             div.className = `kpi-card ${colors[color]}`;
             div.innerHTML = `<h4 class="kpi-title">${title}</h4><p class="kpi-desc">${msg}</p>`;
@@ -693,7 +721,7 @@
                 t2: getNote(data.tool2, 'notes_T2'),
                 t3: getNote(data.tool3, 'notes_T3'), 
                 t4: getNote(data.tool4, 'notes_T4'),
-                t5: data.notes_T5, // *** BUG FIX: Look at root for T5 notes ***
+                t5: data.notes_T5, // *** FIX: Look at root for T5 notes ***
                 t7: data.notes_T7
             };
 
