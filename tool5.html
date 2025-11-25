@@ -84,10 +84,19 @@
     <div class="max-w-3xl mx-auto">
         <header class="text-center mb-6">
             <h1 class="text-2xl md:text-3xl font-extrabold text-green-700">Biochar Project Feasibility Calculator</h1>
-            <h2 class="text-lg font-medium text-gray-700 mt-1">in Latin American Coffee & Cacao Supply Chains</h2>
+            <h2 class="text-lg font-medium text-gray-700 mt-1">for Latin American Coffee & Cacao Supply Chains</h2>
             <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mt-4">Climatebase Fellowship Cohort 8 Capstone Project</p>
             <p class="text-xs font-medium text-gray-500 mt-2">(All values in USD)</p>
-            <p class="text-lg font-medium text-green-800 mt-6">Tool 5: CAPEX & OPEX</p>
+            
+            <div class="mt-4 mb-6">
+                <a href="https://chatgpt.com/g/g-691ea2b1c2888191b85e54e203c53b2f-biochar-feasibility-guide" 
+                   target="_blank" 
+                   class="inline-block bg-blue-50 text-blue-700 hover:text-blue-900 border border-blue-200 rounded-full px-4 py-1 text-sm font-medium transition">
+                    Questions? Click here to ask the Biochar Feasibility Guide AI assistant ↗
+                </a>
+            </div>
+
+            <p class="text-lg font-medium text-green-800">Tool 5: CAPEX & OPEX</p>
         </header>
 
         <div class="w-full mb-8">
@@ -199,7 +208,8 @@
                         <div class="p-3 bg-gray-50 rounded-lg border border-gray-200 space-y-2">
                             <label class="block">
                                 <span class="label-text">1. Logistics Trucks (CAPEX)</span>
-                                <em class="text-xs text-gray-500">The "Owned Trucks" used for feedstock transport in Tool 3.</em>
+                                <div class="tooltip-container ml-1"><span class="tooltip-icon">?</span><span class="tooltip-text">For Owned trucks, operating cost (OPEX) is captured in tool3 for logistics routes.</span></div>
+                                <em class="text-xs text-gray-500 block">The "Owned Trucks" used for feedstock transport in Tool 3.</em>
                             </label>
                             <label class="block">
                                 <span class="label-text text-xs">Number of Logistics Trucks</span>
@@ -213,7 +223,8 @@
                         <div class="p-3 bg-gray-50 rounded-lg border border-gray-200 space-y-2">
                             <label class="block">
                                 <span class="label-text">2. Pickups (CAPEX & OPEX)</span>
-                                <em class="text-xs text-gray-500">For managers, agronomists, or general site tasks.</em>
+                                <div class="tooltip-container ml-1"><span class="tooltip-icon">?</span><span class="tooltip-text">Mobile kiln relocation costs are captured separately below.</span></div>
+                                <em class="text-xs text-gray-500 block">For managers, agronomists, general site tasks, or towing mobile kilns.</em>
                             </label>
                             <label class="block">
                                 <span class="label-text text-xs">Number of Pickups</span>
@@ -232,13 +243,44 @@
                     </div>
                 </div>
 
-                <div class="p-4 bg-white rounded-lg border border-gray-200 space-y-3">
-                    <h4 class="font-semibold text-gray-700">Site Infrastructure & Permitting</h4>
+                <div id="mobileRelocationContainer" class="hidden p-4 bg-white rounded-lg border border-gray-300 shadow-sm space-y-4">
+                    <h4 class="font-semibold text-gray-800">Mobile Kiln Relocation (OPEX)</h4>
+                    <p class="text-xs text-gray-500 italic">Costs for moving your mobile kiln(s) between sites. Number of kilns is loaded from Tool 2.</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <label class="block">
-                            <span class="label-text">Buildings, Ventilation & Concrete Pads ($)</span>
-                            <input type="number" id="inputInfrastructureCost" value="75000" min="0" class="input-field">
+                            <span class="label-text">Number of Mobile Kilns</span>
+                            <input type="number" id="inputNumMobileKilns" class="input-field" readonly>
                         </label>
+                        <label class="block">
+                            <span class="label-text">Relocations per Kiln per Year</span>
+                            <input type="number" id="inputRelocationsPerKiln" value="4" min="0" class="input-field">
+                        </label>
+                        <label class="block">
+                            <span class="label-text">Avg. Time per Relocation (Hours)</span>
+                            <input type="number" id="inputTimePerRelocation" value="8" min="0" class="input-field">
+                        </label>
+                        <label class="block">
+                            <span class="label-text">Hourly Cost per Relocation Trip</span>
+                            <div class="tooltip-container ml-1"><span class="tooltip-icon">?</span><span class="tooltip-text">All-in cost for the tow vehicle (driver, fuel, maint, etc.) for a ONE-WAY trip.</span></div>
+                            <input type="number" id="inputCostPerHourRelocation" value="25" min="0" class="input-field">
+                        </label>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded-lg border border-blue-200 text-right">
+                        <span class="text-sm font-semibold text-blue-900">Total Mobile Relocation OPEX:</span>
+                        <span id="outputTotalMobileOpex" class="text-xl font-bold text-blue-800 ml-2">$0</span>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-white rounded-lg border border-gray-200 space-y-3">
+                    <h4 class="font-semibold text-gray-700">Site Infrastructure & Permitting</h4>
+                    <label class="block">
+                        <span class="label-text">Buildings, Ventilation & Concrete Pads ($)</span>
+                        <input type="number" id="inputInfrastructureCost" value="75000" min="0" class="input-field">
+                        <p class="text-[0.65rem] text-gray-500 mt-1 leading-tight">
+                            This value is assumed to include relevant civil, structural, mechanical, and electrical components, as well as basic site services required for biochar operations (e.g. foundations, ventilation, safety infrastructure, and auxiliary systems). Local requirements and permitting standards may significantly affect total cost. Mobile projects may require significantly less site costs.
+                        </p>
+                    </label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <label class="block">
                             <span class="label-text">One-time Permit Application Fees ($)</span>
                             <div class="tooltip-container ml-1"><span class="tooltip-icon">?</span><span class="tooltip-text">Air quality permit application fees, lab fees, and consulting fees.</span></div>
@@ -338,11 +380,18 @@
             </div>
             
             <div id="lcaCostContainer" class="hidden mt-6 pt-4 border-t border-blue-200">
-                 <label class="block">
-                    <span class="label-text font-bold text-blue-800">One-time LCA Cost ($)</span>
-                    <div class="tooltip-container ml-1"><span class="tooltip-icon">?</span><span class="tooltip-text">Cost to hire a 3rd-party consultant for your Life Cycle Assessment (LCA), often required for certification.</span></div>
-                    <input type="number" id="inputLcaCost" value="5000" min="0" class="input-field border-2 border-blue-300">
-                </label>
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                     <label class="block">
+                        <span class="label-text font-bold text-blue-800">One-time LCA Cost (CAPEX $)</span>
+                        <div class="tooltip-container ml-1"><span class="tooltip-icon">?</span><span class="tooltip-text">Cost to hire a 3rd-party consultant for your Life Cycle Assessment (LCA), often required for certification.</span></div>
+                        <input type="number" id="inputLcaCost" value="5000" min="0" class="input-field border-2 border-blue-300">
+                    </label>
+                    <label class="block">
+                        <span class="label-text font-bold text-blue-800">Annual LCA Renewal (OPEX $)</span>
+                        <div class="tooltip-container ml-1"><span class="tooltip-icon">?</span><span class="tooltip-text">Cost to refurbish the LCA data with a new audit.</span></div>
+                        <input type="number" id="inputLcaAnnualCost" value="2000" min="0" class="input-field border-2 border-blue-300">
+                    </label>
+                 </div>
             </div>
         </div>
 
@@ -360,37 +409,10 @@
                 Note: You are storing feedstock. Ensure your Labor and Utilities estimates below account for the extra work of re-handling and re-drying material.
             </div>
 
-            <div id="mobileRelocationContainer" class="hidden mb-6 p-4 bg-white rounded-lg border border-gray-300 shadow-sm space-y-4">
-                <h4 class="font-semibold text-gray-800">Mobile Kiln Relocation (OPEX)</h4>
-                <p class="text-xs text-gray-500 italic">Costs for moving your mobile kiln(s) between sites. Number of kilns is loaded from Tool 2.</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <label class="block">
-                        <span class="label-text">Number of Mobile Kilns</span>
-                        <input type="number" id="inputNumMobileKilns" class="input-field" readonly>
-                    </label>
-                    <label class="block">
-                        <span class="label-text">Relocations per Kiln per Year</span>
-                        <input type="number" id="inputRelocationsPerKiln" value="4" min="0" class="input-field">
-                    </label>
-                    <label class="block">
-                        <span class="label-text">Avg. Time per Relocation (Hours)</span>
-                        <input type="number" id="inputTimePerRelocation" value="8" min="0" class="input-field">
-                    </label>
-                    <label class="block">
-                        <span class="label-text">Hourly Cost per Relocation Trip</span>
-                        <div class="tooltip-container ml-1"><span class="tooltip-icon">?</span><span class="tooltip-text">All-in cost for the tow vehicle (driver, fuel, maint, etc.) for a ONE-WAY trip.</span></div>
-                        <input type="number" id="inputCostPerHourRelocation" value="25" min="0" class="input-field">
-                    </label>
-                </div>
-                <div class="bg-blue-50 p-3 rounded-lg border border-blue-200 text-right">
-                    <span class="text-sm font-semibold text-blue-900">Total Mobile Relocation OPEX:</span>
-                    <span id="outputTotalMobileOpex" class="text-xl font-bold text-blue-800 ml-2">$0</span>
-                </div>
-            </div>
-
             <div class="space-y-6">
                     <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm space-y-3">
                         <h4 class="font-semibold text-gray-700">Labor Expenses</h4>
+                        <p class="text-xs text-gray-500 italic mb-2">Enter annual salaries for all full-time or seasonal staff. This includes drivers, operators, maintenance staff, management, and site labor.</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block label-text">General Staff Count</label>
@@ -500,11 +522,27 @@
 
         let saveButton, navigationButtons, saveStatus, unsavedWarning;
 
-        // MATRICES
-        const COUNTRY_DATA = { "bolivia": { general: 5500, management: 20000, tax: 25, interest: 12, permit: 8000 }, "custom": { general: 5000, management: 20000, tax: 25, interest: 10, permit: 8000 } };
+        // *** UPDATED COUNTRY DATA MATRIX ***
+        const COUNTRY_DATA = {
+            "bolivia": { general: 5500, management: 20000, tax: 25, interest: 12, permit: { micro: 150, small: 150, medium: 500, large: 1500 } },
+            "brazil": { general: 6500, management: 28000, tax: 34, interest: 26, permit: { micro: 1000, small: 1000, medium: 2000, large: 3500 } },
+            "colombia": { general: 5000, management: 21000, tax: 35, interest: 18, permit: { micro: 1000, small: 1000, medium: 1500, large: 2000 } },
+            "costa_rica": { general: 7000, management: 25000, tax: 30, interest: 14, permit: { micro: 500, small: 500, medium: 1500, large: 3000 } },
+            "dominican_republic": { general: 7500, management: 26000, tax: 27, interest: 15, permit: { micro: 150, small: 150, medium: 300, large: 900 } },
+            "ecuador": { general: 9500, management: 24000, tax: 25, interest: 13, permit: { micro: 200, small: 200, medium: 500, large: 1500 } },
+            "el_salvador": { general: 5000, management: 19000, tax: 30, interest: 12, permit: { micro: 100, small: 100, medium: 300, large: 1000 } },
+            "guatemala": { general: 5500, management: 20000, tax: 25, interest: 13, permit: { micro: 100, small: 100, medium: 500, large: 1500 } },
+            "honduras": { general: 4800, management: 19000, tax: 25, interest: 17, permit: { micro: 300, small: 300, medium: 1000, large: 2000 } },
+            "mexico": { general: 7500, management: 26000, tax: 30, interest: 16, permit: { micro: 150, small: 150, medium: 300, large: 900 } },
+            "nicaragua": { general: 4500, management: 18000, tax: 30, interest: 16, permit: { micro: 100, small: 100, medium: 300, large: 1000 } },
+            "panama": { general: 14000, management: 35000, tax: 25, interest: 9, permit: { micro: 500, small: 500, medium: 1500, large: 3000 } },
+            "peru": { general: 6000, management: 22000, tax: 29.5, interest: 14, permit: { micro: 150, small: 150, medium: 500, large: 1500 } },
+            "custom": { general: 5000, management: 20000, tax: 25, interest: 10, permit: { micro: 200, small: 200, medium: 500, large: 1000 } }
+        };
+
         const LABOR_MATRIX = { "micro": { general: 1, management: 0 }, "small": { general: 3, management: 1 }, "medium": { general: 6, management: 2 }, "large": { general: 15, management: 4 }};
         
-        // *** NEW: Puro & CSI Fee Matrices ***
+        // *** Puro & CSI Fee Matrices ***
         const PURO_CONVERSION_RATE = 1.10;
         const PURO_FEES_EUR = {
             1000: 13200,  // <= 1000
@@ -529,7 +567,7 @@
             'inputAncillaryCost', 'inputNumLogisticsTrucks', 'inputLogisticsTruckCost', 'inputNumPickups', 'inputPickupCost', 
             'inputInfrastructureCost', 'inputPermitCapex', 'selectLandModel', 'inputLandLease', 'inputLandPurchase',
             'selectCertSource', 'selectRegistry', 'outputRegistryCost', 'selectMRVPartner',
-            'outputMRVSetup', 'outputMRVAnnual', 'inputLcaCost', 'inputMonthsOperational', 
+            'outputMRVSetup', 'outputMRVAnnual', 'inputLcaCost', 'inputLcaAnnualCost', 'inputMonthsOperational', 
             'inputRelocationsPerKiln', 'inputTimePerRelocation', 'inputCostPerHourRelocation', 'inputPickupsOpex',
             'inputGeneralStaff', 'inputGeneralSalary', 'inputManagementStaff', 'inputManagementSalary', 
             'inputInsurance', 'inputUtilities', 'inputRegulatory', 'checkForwardContract', 'inputPrepayment',
@@ -757,7 +795,8 @@
                     document.getElementById('outputRegistryCost').value = savedData.opex.registryFees || 0;
                     document.getElementById('outputMRVSetup').value = savedData.capex.mrvSetup || 0;
                     document.getElementById('outputMRVAnnual').value = savedData.opex.mrvAnnual || 0;
-                    document.getElementById('inputLcaCost').value = savedData.capex.lcaCost || 5000; // *** NEW ***
+                    document.getElementById('inputLcaCost').value = savedData.capex.lcaCost || 5000;
+                    document.getElementById('inputLcaAnnualCost').value = savedData.opex.lcaAnnual || 2000; // *** NEW ***
                     
                     document.getElementById('checkForwardContract').checked = savedData.finance?.forwardContract || false;
                     document.getElementById('inputPrepayment').value = savedData.finance?.prepayment || 0;
@@ -815,7 +854,7 @@
                     permitApplication: parseFloat(document.getElementById('inputPermitCapex').value) || 0,
                     landPurchase: parseFloat(document.getElementById('inputLandPurchase').value) || 0,
                     mrvSetup: parseFloat(document.getElementById('outputMRVSetup').value) || 0,
-                    lcaCost: parseFloat(document.getElementById('inputLcaCost').value) || 0, // *** NEW ***
+                    lcaCost: parseFloat(document.getElementById('inputLcaCost').value) || 0,
                     syngasCost: parseFloat(document.getElementById('outputSyngasCost').textContent.replace(/[^0-9.]/g, '')) || 0,
                     totalCapex: parseFloat(document.getElementById('outputTotalCapex').textContent.replace(/[^0-9.]/g, '')) || 0
                 },
@@ -833,6 +872,7 @@
                     registryFees: parseFloat(document.getElementById('outputRegistryCost').value) || 0,
                     mrvPartner: document.getElementById('selectMRVPartner').value,
                     mrvAnnual: parseFloat(document.getElementById('outputMRVAnnual').value) || 0,
+                    lcaAnnual: parseFloat(document.getElementById('inputLcaAnnualCost').value) || 0, // *** NEW ***
                     monthsOperational: parseFloat(document.getElementById('inputMonthsOperational').value) || 12,
                     feedstockWorkingCapital: parseFloat(document.getElementById('inputFeedstockLoanAmount').value) || 0,
                     feedstockLoanInterestRate: parseFloat(document.getElementById('inputFeedstockInterest')?.value) || 0,
@@ -857,7 +897,7 @@
 
             try {
                 projectData.tool5 = dataToSave;
-                projectData.notes_T5 = document.getElementById('toolNotes').value; // *** BUG FIX: Save to correct key ***
+                projectData.notes_T5 = document.getElementById('toolNotes').value;
                 
                 if (window.BiocharEngine) {
                     BiocharEngine.saveProjectData(projectData);
@@ -920,7 +960,15 @@
                     document.getElementById('inputManagementSalary').value = data.management;
                     document.getElementById('inputTaxRate').value = data.tax;
                     document.getElementById('inputInterestRate').value = data.interest;
-                    document.getElementById('inputRegulatory').value = data.permit || 8000;
+                    
+                    // *** NEW: Handle Permit Cost by Scale ***
+                    if (typeof data.permit === 'object') {
+                        // If permit is an object {micro: 100, small: ...}
+                        document.getElementById('inputPermitCapex').value = data.permit[scale] || data.permit['micro'];
+                    } else {
+                        // Fallback for old flat number structure
+                        document.getElementById('inputPermitCapex').value = data.permit || 8000;
+                    }
                 }
                 if (projectState.type === 'mobile') {
                     document.getElementById('inputInfrastructureCost').value = 5000;
