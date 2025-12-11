@@ -611,29 +611,62 @@ function calculateAll() {
     
     // --- F1 (Primary) Calculations ---
     const t1 = getNum('divF1_Tonnes');
-    const a1 = getNum('divF1_Ash') / 100, y1 = getNum('divF1_Yield') / 100, c1 = getNum('divF1_Carbon') / 100, conv1 = getNum('divF1_Conv');
+    const a1 = getNum('divF1_Ash') / 100;
+    const y1 = getNum('divF1_Yield') / 100;
+    const c1 = getNum('divF1_Carbon') / 100;
+    // *** NEW H:C CALC INPUTS ***
+    const h1 = getNum('divF1_Hydrogen') / 100; // Hydrogen Content (%)
+    const e1 = getNum('divF1_Emissions') / 100; // Emissions Deduction (%)
+
     setVal('divF1_StartingVolume', formatTonnage(t1, ' tonnes'));
     const dryAshFree1 = t1 * (1 - a1); setVal('divF1_DryAshFree', formatTonnage(dryAshFree1, ' tonnes'));
     const biocharProduced1 = dryAshFree1 * y1; setVal('divF1_BiocharProduced', formatTonnage(biocharProduced1, ' tonnes'));
     const stableCarbon1 = biocharProduced1 * c1; setVal('divF1_StableCarbon', formatTonnage(stableCarbon1, ' tonnes'));
-    const credits1 = stableCarbon1 * conv1; setVal('divF1_Credits', formatTonnage(credits1, ' tCO2e'));
+
+    // *** NEW H:C CALC LOGIC (Replace old conv factor) ***
+    const convFactor1 = BiocharEngine.calculateConvFactor(c1, h1);
+    const grossCredits1 = stableCarbon1 * convFactor1; 
+    const netCredits1 = grossCredits1 * (1 - e1);
+    
+    // *** NEW OUTPUTS ***
+    setVal('divF1_HCFactor', convFactor1.toFixed(3)); // New H:C factor output
+    setVal('divF1_GrossCredits', formatTonnage(grossCredits1, ' tCO2e')); // Gross Credits output
+    setVal('divF1_NetCredits', formatTonnage(netCredits1, ' tCO2e')); // Final Net Credits output
 
     // --- F2 (Secondary) Calculations ---
     const t2 = getNum('divF2_Tonnes');
-    const a2 = getNum('divF2_Ash') / 100, y2 = getNum('divF2_Yield') / 100, c2 = getNum('divF2_Carbon') / 100, conv2 = getNum('divF2_Conv');
+    const a2 = getNum('divF2_Ash') / 100;
+    const y2 = getNum('divF2_Yield') / 100;
+    const c2 = getNum('divF2_Carbon') / 100;
+    // *** NEW H:C CALC INPUTS ***
+    const h2 = getNum('divF2_Hydrogen') / 100; // Hydrogen Content (%)
+    const e2 = getNum('divF2_Emissions') / 100; // Emissions Deduction (%)
+
     setVal('divF2_StartingVolume', formatTonnage(t2, ' tonnes'));
     const dryAshFree2 = t2 * (1 - a2); setVal('divF2_DryAshFree', formatTonnage(dryAshFree2, ' tonnes'));
     const biocharProduced2 = dryAshFree2 * y2; setVal('divF2_BiocharProduced', formatTonnage(biocharProduced2, ' tonnes'));
     const stableCarbon2 = biocharProduced2 * c2; setVal('divF2_StableCarbon', formatTonnage(stableCarbon2, ' tonnes'));
-    const credits2 = stableCarbon2 * conv2; setVal('divF2_Credits', formatTonnage(credits2, ' tCO2e'));
+
+    // *** NEW H:C CALC LOGIC (Replace old conv factor) ***
+    const convFactor2 = BiocharEngine.calculateConvFactor(c2, h2);
+    const grossCredits2 = stableCarbon2 * convFactor2; 
+    const netCredits2 = grossCredits2 * (1 - e2);
+
+    // *** NEW OUTPUTS ***
+    setVal('divF2_HCFactor', convFactor2.toFixed(3)); // New H:C factor output
+    setVal('divF2_GrossCredits', formatTonnage(grossCredits2, ' tCO2e')); // Gross Credits output
+    setVal('divF2_NetCredits', formatTonnage(netCredits2, ' tCO2e')); // Final Net Credits output
 
     // --- Total Feedstock (at the bottom) ---
     const totalFeedstock = t1 + t2;
+    // *** FIX FOR GENERAL DISPLAY (Original fix) ***
     document.getElementById('displayTotalFeedstock').textContent = totalFeedstock.toLocaleString(undefined, {maximumFractionDigits: 1}) + " tonnes";
 
+    // *** FIX FOR KILN CARD DISPLAYS (The missing IDs we just found) ***
+    setVal('kilnTotalFeedstock', formatTonnage(totalFeedstock, ' t/y'));
+    
     runKilnLogic(totalFeedstock);
 }
-
 function saveProject() {
     const getNum = id => parseFloat(document.getElementById(id)?.value) || 0;
     const getVal = id => document.getElementById(id)?.value;
