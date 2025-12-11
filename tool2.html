@@ -700,6 +700,7 @@ function calculateAll() {
     // --- Total Feedstock (at the bottom) ---
     // This section combines the results from F1 and F2 and must be replaced.
     const total_tonnes = t1 + t2;
+    setVal('displayTotalFeedstock', formatTonnage(total_tonnes, ' tonnes'));
     const total_dryAshFree = dryAshFree1 + dryAshFree2;
     const total_biocharProduced = biocharProduced1 + biocharProduced2;
     const total_stableCarbon = stableCarbon1 + stableCarbon2;
