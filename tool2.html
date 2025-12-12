@@ -246,7 +246,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; color: #1118
             <li class="calc-step">
                 <div class="step-input-area"><div class="step-number-container"><span class="step-label-left"><span class="step-number">5</span><span class="label-text">CO2e Credit Factor</span></span><span class="step-label-right">
                     <div class="tooltip-container"><span class="f-icon">f</span><span class="tooltip-text">Calculates: [Step 4 Carbon] * Factor</span></div>
-                    <div class="tooltip-container"><span class="tooltip-icon">?</span><span class="tooltip-text">This factor converts 1 tonne of stable carbon into tonnes of CO2 equivalent (tCO2e). 1.75 is a conservative estimate.</span></div>
+                    <div class="tooltip-container"><span class="tooltip-icon">?</span><span class="tooltip-text">This is a net crediting factor (not the 3.67 chemistry ratio). It is calibrated to practitioner outcomes. Default 2.29 corresponds to ~1.6 tCO2e per tonne of biochar at 70% stable carbon.</span></div>
                 </span></div><input type="number" id="divF1_Conv" value="2.29" class="input-field" min="0" step="0.1"></div>
                 <div class="step-connector">=</div>
                 <div class="step-output-area"><div class="final-output-box"><span class="step-output-label">Total Claimable Credits</span><div id="divF1_Credits" class="step-output-value">0 tCO2e</div></div></div>
@@ -303,7 +303,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; color: #1118
             <li class="calc-step">
                 <div class="step-input-area"><div class="step-number-container"><span class="step-label-left"><span class="step-number">5</span><span class="label-text">CO2e Credit Factor</span></span><span class="step-label-right">
                     <div class="tooltip-container"><span class="f-icon">f</span><span class="tooltip-text">Calculates: [Step 4 Carbon] * Factor</span></div>
-                    <div class="tooltip-container"><span class="tooltip-icon">?</span><span class="tooltip-text">This factor converts 1 tonne of stable carbon into tonnes of CO2 equivalent (tCO2e). 2.0 is a common value for high-stability wood biochar.</span></div>
+                    <div class="tooltip-container"><span class="tooltip-icon">?</span><span class="tooltip-text">This is a net crediting factor calibrated to practitioner outcomes. Default 2.63 corresponds to ~2.1 tCO2e per tonne of biochar at 80% stable carbon.</span></div>
                 </span></div><input type="number" id="divF2_Conv" value="2.63" class="input-field" min="0" step="0.1"></div>
                 <div class="step-connector">=</div>
                 <div class="step-output-area"><div class="final-output-box theme-purple"><span class="step-output-label">Total Claimable Credits</span><div id="divF2_Credits" class="step-output-value">0 tCO2e</div></div></div>
