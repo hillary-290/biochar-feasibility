@@ -578,7 +578,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- Attach Listeners ---
     // Recalculate listeners
-    ['divF1_Tonnes','divF1_Ash','divF1_Yield','divF1_Carbon','divF1_Conv','divF2_Tonnes','divF2_Ash','divF2_Yield','divF2_Carbon','divF2_Conv'].forEach(id => safeListener(id, 'input', calculateAll));
+['divF1_Tonnes','divF1_Ash','divF1_Yield','divF1_Carbon','divF2_Tonnes','divF2_Ash','divF2_Yield','divF2_Carbon','divF2_Conv'].forEach(id => safeListener(id, 'input', calculateAll));
+   safeListener('hydrogenContent', 'input', calculateAll);
+safeListener('emissionsDeduction', 'input', calculateAll);
     safeListener('selectKiln', 'change', handleKilnSelectChange);
     safeListener('inputCustomKilnPrice', 'input', updateTotalCapex);
     safeListener('inputNumberOfKilns', 'input', updateTotalCapex);
@@ -679,15 +681,29 @@ function handleSupplyModelChange() {
 function calculateAll() {
     const getNum = id => parseFloat(document.getElementById(id)?.value) || 0;
     
-    // --- F1 (Primary) Calculations ---
+// --- F1 (Primary) Calculations ---
     const t1 = getNum('divF1_Tonnes');
-    const a1 = getNum('divF1_Ash') / 100, y1 = getNum('divF1_Yield') / 100, c1 = getNum('divF1_Carbon') / 100, conv1 = getNum('divF1_Conv');
+    const a1 = getNum('divF1_Ash') / 100, y1 = getNum('divF1_Yield') / 100, c1 = getNum('divF1_Carbon') / 100;
+    const h_content = getNum('hydrogenContent') / 100; // New input for Step 5
+    const emiss_deduct = getNum('emissionsDeduction') / 100; // New input for Step 7
+
     setVal('divF1_StartingVolume', formatTonnage(t1, ' tonnes'));
     const dryAshFree1 = t1 * (1 - a1); setVal('divF1_DryAshFree', formatTonnage(dryAshFree1, ' tonnes'));
     const biocharProduced1 = dryAshFree1 * y1; setVal('divF1_BiocharProduced', formatTonnage(biocharProduced1, ' tonnes'));
     const stableCarbon1 = biocharProduced1 * c1; setVal('divF1_StableCarbon', formatTonnage(stableCarbon1, ' tonnes'));
-    const credits1 = stableCarbon1 * conv1; setVal('divF1_Credits', formatTonnage(credits1, ' tCO2e'));
 
+    // --- NEW STEP 5: H:Corg Factor Calculation ---
+    const H_Corg_Factor = 0.6975 + (0.6487 / (1 + Math.exp(-(h_content - 0.0094) / 0.0024)));
+    setVal('valHCorgFactor', H_Corg_Factor.toFixed(3));
+
+    // --- NEW STEP 6: Gross Credits Calculation ---
+    const grossCredits = stableCarbon1 * H_Corg_Factor * 3.67;
+    setVal('valGrossCredits', formatTonnage(grossCredits, ' tCO2e'));
+
+    // --- NEW STEP 7: Final Net Credits Calculation ---
+    const finalNetCredits = grossCredits * (1 - emiss_deduct);
+    setVal('valFinalNetCredits', formatTonnage(finalNetCredits, ' tCO2e'));
+    
     // --- F2 (Secondary) Calculations ---
     const t2 = getNum('divF2_Tonnes');
     const a2 = getNum('divF2_Ash') / 100, y2 = getNum('divF2_Yield') / 100, c2 = getNum('divF2_Carbon') / 100, conv2 = getNum('divF2_Conv');
