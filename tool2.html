@@ -701,8 +701,9 @@ const penalty_factor = getNum('emissionsDeduction'); // Corrected input: NO / 10
     setVal('valGrossCredits', formatTonnage(grossCredits, ' tCO2e'));
 
     // --- NEW STEP 7: Final Net Credits Calculation ---
-    const finalNetCredits = grossCredits * (1 - emiss_deduct);
-    setVal('valFinalNetCredits', formatTonnage(finalNetCredits, ' tCO2e'));
+// --- NEW STEP 7: Final Net Credits Calculation ---
+const finalNetCredits = grossCredits / penalty_factor;
+setVal('valFinalNetCredits', formatTonnage(finalNetCredits, ' tCO2e'));
     
     // --- F2 (Secondary) Calculations ---
     const t2 = getNum('divF2_Tonnes');
