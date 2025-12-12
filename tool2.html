@@ -684,8 +684,8 @@ function calculateAll() {
 // --- F1 (Primary) Calculations ---
     const t1 = getNum('divF1_Tonnes');
     const a1 = getNum('divF1_Ash') / 100, y1 = getNum('divF1_Yield') / 100, c1 = getNum('divF1_Carbon') / 100;
-    const h_content = getNum('hydrogenContent') / 100; // New input for Step 5
-    const emiss_deduct = getNum('emissionsDeduction') / 100; // New input for Step 7
+    const h_content = getNum('hydrogenContent') / 100; // New input for Step 5 (kept / 100 for percentage input)
+const penalty_factor = getNum('emissionsDeduction'); // Corrected input: NO / 100. It's the factor (1.75)
 
     setVal('divF1_StartingVolume', formatTonnage(t1, ' tonnes'));
     const dryAshFree1 = t1 * (1 - a1); setVal('divF1_DryAshFree', formatTonnage(dryAshFree1, ' tonnes'));
