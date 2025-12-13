@@ -244,11 +244,12 @@ body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; color: #1118
                 <div class="step-output-area"><span class="step-output-label">Total Carbono Estable</span><div id="divF1_StableCarbon" class="step-output-value">0 ton</div></div>
             </li>
             <li class="calc-step">
-                <div class="step-input-area"><div class="step-number-container"><span class="step-label-left"><span class="step-number">5</span><span class="label-text">Factor de Crédito CO2e</span></span><span class="step-label-right">
+                <div class="step-input-area"><div class="step-number-container"><span class="step-label-left"><span class="step-number">5</span><span class="label-text">Factor neto de acreditación (calibrado)</span></span><span class="step-label-right">
                     <div class="tooltip-container"><span class="f-icon">f</span><span class="tooltip-text">Calcula: [Paso 4 Carbono] * Factor</span></div>
-                    <div class="tooltip-container"><span class="tooltip-icon">?</span><span class="tooltip-text">CO2e neto eliminado por tonelada de biochar. Para residuos de café, típicamente 1.5 - 2.0 (Datos Puro.earth / NetZero).</span></div>
+<div class="tooltip-container"><span class="tooltip-icon">?</span><span class="tooltip-text">Este es un factor neto de acreditación (no la relación química 3,67). Está calibrado según resultados observados por profesionales del sector. El valor predeterminado de 2,29 corresponde a ~1,6 tCO₂e por tonelada de biochar con 70% de carbono estable.</span></div>
+
                 </span></div>
-                <input type="number" id="divF1_Conv" value="1.75" class="input-field" min="0" step="0.1"></div>
+                <input type="number" id="divF1_Conv" value="2.29" class="input-field" min="0" step="0.1"></div>
                 <div class="step-connector">=</div>
                 <div class="step-output-area"><div class="final-output-box"><span class="step-output-label">Total Créditos Reclamables</span><div id="divF1_Credits" class="step-output-value">0 tCO2e</div></div></div>
             </li>
