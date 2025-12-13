@@ -304,11 +304,13 @@ body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; color: #1118
                 <div class="step-output-area"><span class="step-output-label">Total Carbono Estável</span><div id="divF2_StableCarbon" class="step-output-value">0 ton</div></div>
             </li>
             <li class="calc-step">
-                <div class="step-input-area"><div class="step-number-container"><span class="step-label-left"><span class="step-number">5</span><span class="label-text">Fator de Crédito CO2e</span></span><span class="step-label-right">
+                <div class="step-input-area"><div class="step-number-container"><span class="step-label-left"><span class="step-number">5</span><span class="label-text">Fator líquido de creditação (calibrado)</span>
+</span><span class="step-label-right">
                     <div class="tooltip-container"><span class="f-icon">f</span><span class="tooltip-text">Calcula: [Passo 4 Carbono] * Fator</span></div>
-                    <div class="tooltip-container"><span class="tooltip-icon">?</span><span class="tooltip-text">Este fator converte 1 tonelada de carbono estável em toneladas de CO2 equivalente (tCO2e). 2.0 é um valor comum para biochar de madeira de alta estabilidade.</span></div>
+                    <div class="tooltip-container"><span class="tooltip-icon">?</span><span class="tooltip-text">Este é um fator líquido de creditação (não é a relação química 3.67). Ele é calibrado com base em resultados de projetos reais. O valor padrão 2.63 equivale a ~2.1 tCO2e por tonelada de biochar com 80% de carbono estável.
+</span></div>
                 </span></div>
-                <input type="number" id="divF2_Conv" value="2.0" class="input-field" min="0" step="0.1"></div>
+                <input type="number" id="divF2_Conv" value="2.63" class="input-field" min="0" step="0.1"></div>
                 <div class="step-connector">=</div>
                 <div class="step-output-area"><div class="final-output-box theme-purple"><span class="step-output-label">Total Créditos Reclamáveis</span><div id="divF2_Credits" class="step-output-value">0 tCO2e</div></div></div>
             </li>
